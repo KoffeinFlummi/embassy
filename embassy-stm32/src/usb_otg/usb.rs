@@ -1260,6 +1260,11 @@ impl<'d, T: Instance> embassy_usb_driver::EndpointIn for Endpoint<'d, T, In> {
                         });
                     });
 
+                    r.grstctl().write(|w| {
+                        w.set_txfflsh(true);
+                        w.set_txfnum(0x10);
+                    });
+
                     trace!("tx fifo for ep={} full, waiting for txfe", index);
 
                     Poll::Pending
